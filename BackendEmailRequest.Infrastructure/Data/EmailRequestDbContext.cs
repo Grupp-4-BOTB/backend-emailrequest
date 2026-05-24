@@ -9,7 +9,7 @@ public class EmailRequestDbContext : DbContext
     {
     }
 
-    public DbSet<InviteEmailEntity> Groups { get; set; }
+    public DbSet<EmailRequestEntity> Groups { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
