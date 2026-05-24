@@ -9,34 +9,37 @@ namespace BackendEmailRequest.API.Controllers;
 [Route("api/[controller]")]
 public class EmailRequestController : ControllerBase
 {
-    private readonly IEmailRequestService _emailService;
+    private readonly IInvitationService _invitationService;
 
-    public EmailRequestController(IEmailRequestService emailService)
+    public EmailRequestController(IInvitationService invitationService)
     {
-        _emailService = emailService;
+        _invitationService = invitationService;
     }
 
 
 
 
 
-    // EMAIL INVITE
-    // HANTERAR UTSÄNDNING AV EMAIL INBJUDAN TILL GRUPPEN
+
+
+
+
+    
 
     [HttpPost("emailinvite")]
-    public async Task<IActionResult> SendInvite([FromBody] InviteRequestDTO request) // inviteRequestDTO innehåller toEmail
+    public async Task<IActionResult> SendInvite([FromBody] InviteRequestDTO request)
     {
-        // 1. HAR HÅRDKODAT MAILEN SOM ANVÄNDAREN FÅR I MAILET SÅLÄNGE! (Byta ut mot att den som skickade inbjudan sen ska stå här.)
+        
+        // 1. HÅRDKODAT NAMNET PÅ AVSÄNDAREN FOR NOW, ÄNDRAS SEN
         string inviterEmail = "SAMUEL JOHANSSON";
 
-        // 2. VERCEL-länken som kopplar användarens email med sidan så sidan vet vem som går in
-        string inviteLink = $"https://lms-shiko.vercel.app/emailverification?email={request.RecipientEmail}";
 
-        // 3. Skicka till din service
-        await _emailService.SendInviteEmailAsync(request.RecipientEmail, inviterEmail, inviteLink);
 
-        return Ok(new { message = "The invite has been sent to email!" }); //skrivs ut när mailet skickats iväg på frontend
+
+        //ANROPAR GABRIELS  FÖR ANVÄNDARE.
+        // OM ANVÄNDARE EXISTERAR SÅ SKICKAS MAIL UT
+        await _invitationService.CreateGroupInvitationAsync(request.RecipientEmail, inviterEmail);
+
+        return Ok(new { message = "The invite has been processed and sent!" });
     }
 }
-
-

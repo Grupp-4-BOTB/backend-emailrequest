@@ -1,5 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using BackendEmailRequest.Application.Interfaces;
+using BackendEmailRequest.Application.Services;
 using BackendEmailRequest.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,8 +30,7 @@ builder.Services.AddScoped<BackendEmailRequest.Application.Interfaces.IEmailRequ
 
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
 
 
 
@@ -38,23 +39,36 @@ builder.Services.AddDbContext<EmailRequestDbContext>(options =>
 
 
 
+// Löser så att jag kan "ärva" från DBcontext utan att flytta filerna eller ändra dependency. Gjorde samma sak i förra projektet för FitnessApp
+builder.Services.AddHttpClient<IInvitationService, InvitationService>();
 
+builder.Services.AddSwaggerGen(); // FÖR SWAGGER
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// SWAGGER
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();                                                                           // FÖR SWAGGER
+    app.UseSwaggerUI(options =>                                                                 // FÖR SWAGGER
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "SEND INVITATION EMAIL");           // FÖR SWAGGER
+        options.RoutePrefix = string.Empty;                                                     // FÖR SWAGGER
+    });
 }
+
+
+
+
+
+
+
+
+
 
 app.UseHttpsRedirection();
 
 app.UseCors();
-
-
-
-
 
 app.UseAuthorization();
 
