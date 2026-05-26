@@ -1,7 +1,10 @@
 using BackendEmailRequest.Application.Interfaces;
 using BackendEmailRequest.Application.Services;
 using BackendEmailRequest.Infrastructure.Data;
+using BackendEmailRequest.API.Swagger;
 using Microsoft.EntityFrameworkCore;
+using BackendEmailRequest.API.Security;
+using Azure.Messaging.ServiceBus;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +24,13 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+// 2 SWAGGER KEY FÖR SÄKERHET
+builder.Services.Configure<ApiKeyOptions>(builder.Configuration.GetSection("ApiKeyOptions"));
+builder.Services.AddScoped<ApiKeyAuthFilter>();
+
+
+
+
 
 
 
@@ -28,10 +38,19 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<BackendEmailRequest.Application.Interfaces.IEmailRequestService, BackendEmailRequest.Application.Services.EmailRequestService>();
 
 
+// LÅSER SÅ MAN MÅSTE SKRIVA IN SÄKERHETSNYCKEL FÖR SWAGGER
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiKeyAuthFilter>();
+});
 
-builder.Services.AddControllers();
 
 
+
+
+
+// SWAGGER
+builder.Services.AddSwagger();
 
 
 builder.Services.AddDbContext<EmailRequestDbContext>(options =>
@@ -42,28 +61,15 @@ builder.Services.AddDbContext<EmailRequestDbContext>(options =>
 // Löser så att jag kan "ärva" från DBcontext utan att flytta filerna eller ändra dependency. Gjorde samma sak i förra projektet för FitnessApp
 builder.Services.AddHttpClient<IInvitationService, InvitationService>();
 
-builder.Services.AddSwaggerGen(); // FÖR SWAGGER
+
+
+
 
 var app = builder.Build();
 
+
 // SWAGGER
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();                                                                           // FÖR SWAGGER
-    app.UseSwaggerUI(options =>                                                                 // FÖR SWAGGER
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "SEND INVITATION EMAIL");           // FÖR SWAGGER
-        options.RoutePrefix = string.Empty;                                                     // FÖR SWAGGER
-    });
-}
-
-
-
-
-
-
-
-
+app.MapSwagger(app.Environment);
 
 
 app.UseHttpsRedirection();

@@ -4,6 +4,7 @@ using BackendEmailRequest.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEmailRequest.Infrastructure.Migrations
 {
     [DbContext(typeof(EmailRequestDbContext))]
-    partial class EmailRequestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260525190139_AddInviterEmailToDatabase")]
+    partial class AddInviterEmailToDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

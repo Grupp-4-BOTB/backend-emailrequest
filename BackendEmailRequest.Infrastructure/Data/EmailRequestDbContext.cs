@@ -9,7 +9,9 @@ public class EmailRequestDbContext : DbContext
     {
     }
 
-    public DbSet<EmailRequestEntity> Groups { get; set; }
+
+    //skapar databasen för just email utskicken
+    public DbSet<EmailRequestEntity> EmailRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
