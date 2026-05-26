@@ -3,6 +3,7 @@ using BackendEmailRequest.API.DTOs;
 using BackendEmailRequest.Application.Interfaces;
 using BackendEmailRequest.Domain.Entities;
 using BackendEmailRequest.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -35,17 +36,22 @@ public class EmailRequestController : ControllerBase
 
 
 
-    
 
+    [Authorize]
     [HttpPost("emailinvite")]
     public async Task<IActionResult> SendInvite([FromBody] InviteRequestDTO request)
     {
-        
-        // 1. HÅRDKODAT NAMNET PÅ AVSÄNDAREN FOR NOW, ÄNDRAS SEN.
-       // string inviterEmail = "SAMUEL JOHANSSON";
 
-        // Istäklet för den hårdkodade Samuel ovanför använder jag nedan (Om Gabriel inte hinner klart med sin databas använder jag SAMUEL JOHANSSON ovan och kommenterar ut dom två nedan.!
-        string inviterEmail = request.InviterEmail;
+        // 1. HÅRDKODAT NAMNET PÅ AVSÄNDAREN FOR NOW, ÄNDRAS SEN.
+        // string inviterEmail = "SAMUEL JOHANSSON";
+
+        // lagt in 3 OLIKA där den söker efter personen som är inloggad just då! Dom två första namnen togs från Gabriels Service. Behöll Samuel Johansson ENDAST som backup OM systemet inte hittar inloggad medlem, så Samuels namn istället skickas. 
+        var inviterEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+                           ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+                           ?? User.Identity?.Name
+                           ?? "SAMUEL JOHANSSON";
+
+
         int groupId = request.GroupId;
 
 
