@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="../BackendEmailRequest.Application/BackendEmailRequest.Application.csproj" />
-  <Project Path="../BackendEmailRequest.Domain/BackendEmailRequest.Domain.csproj" />
-  <Project Path="../BackendEmailRequest.Infrastructure/BackendEmailRequest.Infrastructure.csproj" />
-  <Project Path="BackendEmailRequest.API.csproj" />
-</Solution>
