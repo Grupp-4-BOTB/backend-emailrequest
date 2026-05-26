@@ -32,13 +32,13 @@ public class InvitationService : IInvitationService
     public async Task DoesUserExistAsync(string recipientEmail)
     {
         // Göra ett HTTP anrop (GET) till Gabriels API
-        var response = await _httpClient.GetAsync($"https://gabriels-api.com/api/users/{recipientEmail}"); //ÄNDRA TILL GABRIELS RIKTIGA API. kolla i ONENOTE i din sida för "HITTA NÅNS API"
+        var response = await _httpClient.GetAsync($"https://gabriels-api.com/api/users/{recipientEmail}"); //ÄNDRA TILL GABRIELS RIKTIGA API
 
 
         // Om Gabriel INTE svarar med 200 OK (användaren finns ej) -> Kasta felmeddelande direkt!
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception("User not found.");
+            throw new Exception("User does not exist.");
         }
     }
 
@@ -56,8 +56,8 @@ public class InvitationService : IInvitationService
 
 
         // 2. Skicka mailet med länkarna direkt
-        var acceptLink = $"https://lms-shiko.vercel.app/emailverification?id={invitationId}&status=accepted";
-        var declineLink = $"https://lms-shiko.vercel.app/emailverification?id={invitationId}&status=declined";
+        var acceptLink = $"https://lms-shiko.vercel.app/login?groupId={groupId}&invitationId={invitationId}"; //ANVÄÖNDAREN LOGGAR IN OCH GÅR MED I GRUPP
+        var declineLink = "https://lms-shiko.vercel.app/"; //SKICKAR ANVÄNDAREN DIREKT TILL FÖRSTASIDAN OCH INBJUDAN NEKAS
 
         await _emailService.SendInviteEmailAsync(recipientEmail, inviterEmail, acceptLink, declineLink);
     }
