@@ -52,7 +52,7 @@ public class EmailRequestController : ControllerBase
                            ?? "SAMUEL JOHANSSON";
 
 
-        int groupId = request.GroupId;
+        int groupId = _context.EmailRequests.Count() + 1; // NÄR NY GRUPP SKAPAS SÅ +1 
 
 
 
