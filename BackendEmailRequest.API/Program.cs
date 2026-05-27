@@ -38,14 +38,15 @@ builder.Services.AddScoped<ApiKeyAuthFilter>();
 builder.Services.AddScoped<BackendEmailRequest.Application.Interfaces.IEmailRequestService, BackendEmailRequest.Application.Services.EmailRequestService>();
 
 
-// LÅSER SÅ MAN MÅSTE SKRIVA IN SÄKERHETSNYCKEL FÖR SWAGGER
-builder.Services.AddControllers(options =>
+// LÅSER SÅ MAN MÅSTE SKRIVA IN SÄKERHETSNYCKEL FÖR SWAGGER.
+// KOMMENTERAR UT SÅ DEN FUNKAR I ÄKTA MILJÖ
+/*builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ApiKeyAuthFilter>();
-});
+});*/
 
 
-
+builder.Services.AddControllers();
 
 
 
