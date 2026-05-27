@@ -14,6 +14,7 @@ namespace BackendEmailRequest.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+// [Authorize] BORTKOMMENTERAD SÅLÄNGE FÖR ATT INTE KRASCHA HELA SYSTEMET. FIXAR TILL SEN NÄR GABRIELS DATABAS E PÅ PLATS
 public class EmailRequestController : ControllerBase
 {
 
@@ -37,7 +38,7 @@ public class EmailRequestController : ControllerBase
 
 
 
-    [Authorize]
+    
     [HttpPost("emailinvite")]
     public async Task<IActionResult> SendInvite([FromBody] InviteRequestDTO request)
     {
@@ -46,6 +47,7 @@ public class EmailRequestController : ControllerBase
         // string inviterEmail = "SAMUEL JOHANSSON";
 
         // lagt in 3 OLIKA där den söker efter personen som är inloggad just då! Dom två första namnen togs från Gabriels Service. Behöll Samuel Johansson ENDAST som backup OM systemet inte hittar inloggad medlem, så Samuels namn istället skickas. 
+        // PGA ingen databas för tillfället skickar den automatiskt ut det hårdkodade namnet (SAMUEL JOHANSSON)
         var inviterEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
                            ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
                            ?? User.Identity?.Name
