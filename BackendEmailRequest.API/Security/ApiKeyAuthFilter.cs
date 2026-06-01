@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 
@@ -25,7 +25,7 @@ public class ApiKeyAuthFilter : IAuthorizationFilter
         // 2. Kolla om nyckeln matchar den vi har i appsettings.json
         if (!_options.ApiKey.Equals(extractedApiKey))
         {
-            context.Result = new UnauthorizedObjectResult("Felaktig API Key.");
+            context.Result = new UnauthorizedObjectResult("Incorrect API Key.");
             return;
         }
     }

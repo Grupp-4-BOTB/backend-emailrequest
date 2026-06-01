@@ -1,4 +1,4 @@
-﻿using Microsoft.OpenApi;
+﻿/*using Microsoft.OpenApi;
 
 namespace BackendEmailRequest.API.Swagger;
 
@@ -29,4 +29,4 @@ public static class SwaggerConfigurations
 
         return services;
     }
-}
+}*/

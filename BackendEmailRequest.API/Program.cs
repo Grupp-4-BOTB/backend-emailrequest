@@ -1,7 +1,7 @@
 using BackendEmailRequest.Application.Interfaces;
 using BackendEmailRequest.Application.Services;
 using BackendEmailRequest.Infrastructure.Data;
-using BackendEmailRequest.API.Swagger;
+//using BackendEmailRequest.API.Swagger;
 using Microsoft.EntityFrameworkCore;
 using BackendEmailRequest.API.Security;
 using Azure.Messaging.ServiceBus;
@@ -51,7 +51,7 @@ builder.Services.AddControllers();
 
 
 // SWAGGER
-builder.Services.AddSwagger();
+//builder.Services.AddSwagger();
 
 
 builder.Services.AddDbContext<EmailRequestDbContext>(options =>
@@ -70,7 +70,7 @@ var app = builder.Build();
 
 
 // SWAGGER
-app.MapSwagger(app.Environment);
+//app.MapSwagger(app.Environment);
 
 
 app.UseHttpsRedirection();
