@@ -32,13 +32,12 @@ public class InvitationService : IInvitationService
     public async Task DoesUserExistAsync(string recipientEmail)
     {
         // Göra ett HTTP anrop (GET) till Gabriels API
-        var response = await _httpClient.GetAsync($"https://gabriels-api.com/api/users/{recipientEmail}"); //ÄNDRA TILL GABRIELS RIKTIGA API
-
+        var response = await _httpClient.GetAsync($"https://shiko-identity-webbapi.azurewebsites.net/api/auth/check-email?email={recipientEmail}"); //GABRIELS API
 
         // Om Gabriel INTE svarar med 200 OK (användaren finns ej) -> Kasta felmeddelande direkt!
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception("User does not exist.");
+            throw new Exception("This user does not exist.");
         }
     }
 
