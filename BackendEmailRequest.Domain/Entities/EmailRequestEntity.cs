@@ -17,7 +17,7 @@ public class EmailRequestEntity
 
     //NYCKELN FÖR GRUPPEN
     [Required]
-    public string InvitationId { get; set; }
+    public string InvitationId { get; set; } = string.Empty;
 
     //ID FÖR GRUPPEN
     [Required]
@@ -26,13 +26,13 @@ public class EmailRequestEntity
 
     //Avsändaren
     [Required]
-    public string InviterEmail { get; set; }
+    public string InviterEmail { get; set; } = string.Empty;
 
 
     // Mottagaren
     [Required]
     [EmailAddress]
-    public string RecipientEmail { get; set; }
+    public string RecipientEmail { get; set; } = string.Empty;
 
 
     //tID

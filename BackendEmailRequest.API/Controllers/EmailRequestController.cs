@@ -14,7 +14,7 @@ namespace BackendEmailRequest.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-// [Authorize] BORTKOMMENTERAD SÅLÄNGE FÖR ATT INTE KRASCHA HELA SYSTEMET. FIXAR TILL SEN NÄR GABRIELS DATABAS E PÅ PLATS
+// [Authorize] BORTKOMMENTERAD SÅLÄNGE FÖR ATT INTE KRASCHA HELA SYSTEMET. FIXAR TILL SEN NÄR GABRIELS DATABAS E PÅ PLATS. Denna delen kopplas till jwt. 
 public class EmailRequestController : ControllerBase
 {
 
@@ -54,11 +54,11 @@ public class EmailRequestController : ControllerBase
                            ?? "SAMUEL JOHANSSON";
 
 
-        int groupId = _context.EmailRequests.Count() + 1; // NÄR NY GRUPP SKAPAS SÅ +1 
 
-
-
-
+        // Denna delen räknar ut nästa lediga nummer för en ny grupp
+        // Detta är för att garantera att varje ny inbjudan får ett unikt gruppnummer som är ett snäpp högre än det förra,
+        // utan att krocka med gamla nummer så det inte skulle "radera" rader i databasen.
+        int groupId = (_context.EmailRequests.Max(x => (int?)x.GroupId) ?? 0) + 1; 
 
 
 
@@ -78,11 +78,6 @@ public class EmailRequestController : ControllerBase
 
         _context.EmailRequests.Add(newInvitation);
         await _context.SaveChangesAsync();
-
-
-
-
-
 
 
 
