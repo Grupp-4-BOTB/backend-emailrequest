@@ -6,6 +6,7 @@ using BackendEmailRequest.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -55,30 +56,45 @@ public class EmailRequestController : ControllerBase
 
 
 
-        // Denna delen räknar ut nästa lediga nummer för en ny grupp
-        // Detta är för att garantera att varje ny inbjudan får ett unikt gruppnummer som är ett snäpp högre än det förra,
-        // utan att krocka med gamla nummer så det inte skulle "radera" rader i databasen.
-        int groupId = (_context.EmailRequests.Max(x => (int?)x.GroupId) ?? 0) + 1; 
+        int groupId;
 
-
+        try
+        {
+            // Denna delen räknar ut nästa lediga nummer för en ny grupp
+            // Detta är för att garantera att varje ny inbjudan får ett unikt gruppnummer som är ett snäpp högre än det förra,
+            // utan att krocka med gamla nummer så det inte skulle "radera" rader i databasen.
+            groupId = (_context.EmailRequests.Max(x => (int?)x.GroupId) ?? 0) + 1;
+        }
+        catch
+        {
+            return BadRequest("Database currently missing. Unable to find/create group-number in database.");
+        }
 
         // Skapa ID för inbjudan här, EN GUID SKAPAS för invitationId i databasen
         // Kopplar ihop rätt inbjudan med rätt person
         var invitationId = Guid.NewGuid().ToString();
 
 
-        // SPARAR TILL MIN DATABAS
-        var newInvitation = new EmailRequestEntity
+
+
+        try
         {
-            InvitationId = invitationId,
-            RecipientEmail = request.RecipientEmail,
-            InviterEmail = inviterEmail,
-            GroupId = groupId,
-        };
+            // SPARAR TILL MIN DATABAS
+            var newInvitation = new EmailRequestEntity
+            {
+                InvitationId = invitationId,
+                RecipientEmail = request.RecipientEmail,
+                InviterEmail = inviterEmail,
+                GroupId = groupId,
+            };
 
-        _context.EmailRequests.Add(newInvitation);
-        await _context.SaveChangesAsync();
-
+            _context.EmailRequests.Add(newInvitation);
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            return BadRequest("Database currently missing. Unable to save to database.");
+        }
 
 
 
