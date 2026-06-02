@@ -44,6 +44,14 @@ public class EmailRequestController : ControllerBase
     public async Task<IActionResult> SendInvite([FromBody] InviteRequestDTO request)
     {
 
+
+
+        // Om placeholdern är tom, skrivs felmedelande om att man måste skriva till email
+        if (request == null || string.IsNullOrWhiteSpace(request.RecipientEmail)) 
+        {
+            return BadRequest("Email address cannot be empty.");
+        }
+
         // 1. HÅRDKODAT NAMNET PÅ AVSÄNDAREN FOR NOW, ÄNDRAS SEN.
         // string inviterEmail = "SAMUEL JOHANSSON";
 
